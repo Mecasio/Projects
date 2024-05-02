@@ -1,10 +1,28 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
+from .models import Record
+
 from .forms import SignUpForm
 
 def home(request):
 
-    return render(request, 'home.html')
+    records = Record.objects.all()
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, "You Have Been Logged In!")
+            return redirect('home')
+        else:
+            messages.success(request, "There Was An Error Logging In, Please Try Again...")
+            return redirect('home')
+    else:
+        return render(request, 'home.html', {'records':records})
+
 
 def register(request):
 
@@ -23,4 +41,4 @@ def register(request):
         form = SignUpForm()
         return render(request, 'register.html', {'form':form})
         
-    return render(request, 'register.html')
+    return render(request, 'register.html', {'form':form})

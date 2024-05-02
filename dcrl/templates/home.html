@@ -5,7 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
-{% include 'base.html' %}   
+{% include 'base.html' %}
+<style>
+    .container{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+    }
+    .form-control{
+        width: 80%;
+    }
+    .submit{
+        width: 40%;
+    }
+</style>   
 <body>
+
+    <div class="container col-md-4">
+        <h1>Log In</h1>
+        <input type="text" class="form-control" placeholder="username" name="username">
+        <input type="password" class="form-control" placeholder="password" name="password">
+        <input type="submit" class="form-control submit" placeholder="submit" name="submit">
+    </div>
 </body>
 </html>
