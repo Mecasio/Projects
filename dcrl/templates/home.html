@@ -1,33 +1,144 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-{% include 'base.html' %}
-<style>
-    .container{
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-        justify-content: center;
-        align-items: center;
-    }
-    .form-control{
-        width: 80%;
-    }
-    .submit{
-        width: 40%;
-    }
-</style>   
-<body>
+{% extends 'base.html' %}
 
-    <div class="container col-md-4">
-        <h1>Log In</h1>
-        <input type="text" class="form-control" placeholder="username" name="username">
-        <input type="password" class="form-control" placeholder="password" name="password">
-        <input type="submit" class="form-control submit" placeholder="submit" name="submit">
+{% block content %}
+
+{% if user.is_authenticated %}
+<table class="table">
+    <thead>
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>EMAIL</th>
+          <th>PHONE</th>
+          <th>ADDRESS</th>
+          <th>CITY</th>
+          <th>STATE</th>
+          <th>ZIPCODE</th>
+          <th>CREATED AT</th>
+          <th>UPDATE</th>
+          <th>DELETE</th>
+        </tr>
+    </thead>
+<tbody>
+    {% if records %}
+        {% for record in records %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.first_name }} {{record.last_name}}</td>
+                <td>{{ record.email }}</td>
+                <td>{{ record.phone }}</td>
+                <td>{{ record.address }}</td>
+                <td>{{ record.city }}</td>
+                <td>{{ record.state }}</td>
+                <td>{{ record.zipcode }}</td>
+                <td>{{ record.created_at }}</td>
+                <td>
+                   <a href="{% url 'update_record' record.id %}"><button class="btn btn-primary">UPDATE</button></a>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                      DELETE
+                  </button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          Are you sure you want to delete this record?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <a href="{% url 'delete_record' record.id %}"><button class="btn btn-danger">Delete</button></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+            </tr>
+
+        {% endfor %}
+
+    {% endif %}
+
+</tbody>
+</table>
+
+{% else %}
+<style>
+  .login-container{
+    display: flex;
+    height: 90vh;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .login-contents{
+    padding: 50px 20px;
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  
+  .loginform{
+    width: 100%;
+    color: white;
+    text-align: center;
+  }
+
+  .button{
+    margin-top: 50px;
+  }
+
+  .button button{
+    border-radius: 55px;
+  }
+</style>
+
+<div class="login-container">
+<div class="col-md-3 login-contents">
+<label for="" class="loginform"><h3>LOGIN</h3></label> <br>
+<br>
+<form action="{% url 'home' %}" method="POST">
+    {% csrf_token  %}
+    <div class="mb3">
+    <input class="form-control" type="text" placeholder="username" name="username" required>
+    </div> <br>
+    <div class="mb3">
+    <input class="form-control" type="password" placeholder="password" name="password" required>
+    </div> <br>
+    <div class="mb3">
+        <div class="d-grid gap-2 col-6 mx-auto button">
+            <button class="btn btn-primary btn-block" type="submit">Login</button>
+        </div>
     </div>
-</body>
-</html>
+</form>
+
+
+</div>
+</div>
+
+{% endif %}
+
+
+<div class="col-md-6 offset-md-3">
+{% if messages %}
+
+        {% for message in messages %}
+          <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+{% endif %}
+</div>
+
+
+
+
+
+
+
+{% endblock %}

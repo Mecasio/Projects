@@ -2,10 +2,16 @@
 
 {% block content %}
 <style>
-    .register-title{
+    .add-title{
         width: 100%;
         text-align: center;
-        margin-bottom: 20px;
+    }
+
+    .back-btn{
+        position: absolute;
+        top: 50px;
+        left: 12px;
+        width: 100px;
     }
 
     .button-container{
@@ -23,24 +29,23 @@
         color: white;
         border-radius: 55px;
     }
-</style>
 
-<div class="register-title">
-    <h1>REGISTER NOW</h1>
+</style>
+<div class="add-title">
+    <h1>UPDATE RECORD</h1>
 </div>
 
-<div class="container col-md-4">
+<a href="{% url 'home' %}"><button class="back-btn"> Back </button></a>  
+<div class="container col-md-6">
     <div class="row">
-        <form action="" method="POST">
+        <form action="" method="POST" class="form">
             {% csrf_token %}
          
             {{form.as_p}}
-             
-            <div class="button-container">
-                <button type="submit" class="submit">Register</button>
-            </div>
+                <div class="button-container">
+                    <button type="submit" class="submit">Update</button>
+                </div>
          </form>
-         
     </div>
 </div>
 
